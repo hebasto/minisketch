@@ -107,7 +107,7 @@ AX_CHECK_COMPILE_FLAG([-fvisibility=hidden],[CXXFLAGS="$CXXFLAGS -fvisibility=hi
 ## Some compilers (gcc) ignore unknown -Wno-* options, but warn about all
 ## unknown options if any other warning is produced. Test the -Wfoo case, and
 ## set the -Wno-foo case if it works.
-AX_CHECK_COMPILE_FLAG([-Wshift-count-overflow],[NOWARN_CXXFLAGS="$NOWARN_CXXFLAGS -Wno-shift-count-overflow"],,[[$CXXFLAG_WERROR]])
+#AX_CHECK_COMPILE_FLAG([-Wshift-count-overflow],[NOWARN_CXXFLAGS="$NOWARN_CXXFLAGS -Wno-shift-count-overflow"],,[[$CXXFLAG_WERROR]])
 
 if test "x$use_ccache" != "xno"; then
   AC_MSG_CHECKING(if ccache should be used)

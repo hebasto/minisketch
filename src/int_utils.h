@@ -70,7 +70,10 @@ public:
         }
         while (bits >= 8) {
             *(out++) = val & 255;
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wshift-count-overflow"
             val >>= 8;
+#pragma GCC diagnostic pop
             bits -= 8;
         }
         state |= ((val & ((I(1) << bits) - 1)) << offset);

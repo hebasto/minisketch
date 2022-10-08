@@ -32,7 +32,7 @@ else()
   add_compile_options(-Werror -Wall)
 endif()
 
-add_definitions(-DDISABLE_DEFAULT_FIELDS -DENABLE_FIELD_32)
+# add_definitions(-DDISABLE_DEFAULT_FIELDS -DENABLE_FIELD_32)
 
 add_library(minisketch STATIC "")
 target_sources(minisketch
@@ -50,7 +50,7 @@ target_sources(minisketch
 if(MSVC)
   target_compile_options(minisketch PRIVATE /wd4065)
 else()
-  target_compile_options(minisketch PRIVATE -Wno-shift-count-overflow)
+  # target_compile_options(minisketch PRIVATE -Wno-shift-count-overflow)
 endif()
 
 add_executable(test ${CMAKE_SOURCE_DIR}/src/test.cpp)

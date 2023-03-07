@@ -100,12 +100,12 @@ task:
   << : *CAT_LOGS
 
 task:
-  name: "x86_64: macOS Catalina"
+  name: "arm64: macOS Monterey"
   macos_instance:
-    image: catalina-base
+    image: ghcr.io/cirruslabs/macos-monterey-base:latest
   env:
-    # Cirrus gives us a fixed number of 12 virtual CPUs.
-    MAKEFLAGS: -j13
+    # Cirrus gives us a fixed number of 4 virtual CPUs.
+    MAKEFLAGS: -j5
   matrix:
     << : *ENV_MATRIX_SAN
   matrix:

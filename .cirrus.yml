@@ -132,13 +132,11 @@ task:
     cpu: 4
     memory: 2G
   env:
-    EXEC_CMD: qemu-s390x -L /usr/s390x-linux-gnu
+    EXEC_CMD: qemu-s390x
     HOST: s390x-linux-gnu
     BUILD:
   << : *MERGE_BASE
   test_script:
-    # https://sourceware.org/bugzilla/show_bug.cgi?id=27008
-    - rm /etc/ld.so.cache
     - ./ci/cirrus.sh
   << : *CAT_LOGS
 

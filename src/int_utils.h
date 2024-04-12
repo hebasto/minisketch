@@ -194,6 +194,7 @@ public:
     }
 
     static constexpr inline bool IsZero(I a) { return a == 0; }
+    static constexpr inline bool IsOne(I a) { return a == 1; }
     static constexpr inline I Mask(I val) { return val & MASK; }
     static constexpr inline I Shift(I val, int bits) { return ((val << bits) & MASK); }
     static constexpr inline I UnsafeShift(I val, int bits) { return (val << bits); }
@@ -252,7 +253,7 @@ template<typename I, int N, typename L, typename F> inline constexpr I GFMul(con
 template<typename I, typename F, int BITS, uint32_t MOD>
 inline I InvExtGCD(I x)
 {
-    if (F::IsZero(x)) return x;
+    if (F::IsZero(x) || F::IsOne(x)) return x;
     I t(0), newt(1);
     I r(MOD), newr = x;
     int rlen = BITS + 1, newrlen = F::Bits(newr, BITS);

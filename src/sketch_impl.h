@@ -366,7 +366,7 @@ public:
     }
 
     size_t Syndromes() const override { return m_syndromes.size(); }
-    void Init(int count) override { m_syndromes.assign(count, 0); }
+    void Init(size_t count) override { m_syndromes.assign(count, 0); }
 
     void Add(uint64_t val) override
     {

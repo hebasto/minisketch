@@ -210,7 +210,7 @@ public:
     static constexpr inline int TopBits(I val) {
         static_assert(Count > 0, "BitsInt::TopBits needs Count > 0");
         static_assert(Count <= BITS, "BitsInt::TopBits needs Offset <= BITS");
-        return val >> (BITS - Count);
+        return static_cast<int>(val >> (BITS - Count));
     }
 
     static inline constexpr I CondXorWith(I val, bool cond, I v) {

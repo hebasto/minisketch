@@ -159,7 +159,7 @@ static inline int CountBits(I val, int max) {
     }
     if (!ret) return 0;
     return index + 1;
-#elif HAVE_CLZ
+#elif defined(HAVE_CLZ)
     (void)max;
     if (val == 0) return 0;
     if (std::numeric_limits<unsigned>::digits >= std::numeric_limits<I>::digits) {

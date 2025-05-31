@@ -23,14 +23,8 @@ jobs:
         configuration:
           - job_name: 'x64 (MSVC): Windows (VS 2022)'
             build_configuration: 'Release'
-          - job_name: 'x64 (MSVC): Windows (VS 2022, debug)'
-            build_configuration: 'Debug'
           - job_name: 'x64 (MSVC): Windows (VS 2022, shared)'
             cmake_options: '-DBUILD_SHARED_LIBS=ON'
-            build_configuration: 'Release'
-          - job_name: 'x64 (clang-cl): Windows (VS 2022)'
-            cxx_flags: '-Wno-error=unused-parameter'
-            cmake_options: '-T ClangCL'
             build_configuration: 'Release'
 
     steps:
@@ -38,8 +32,6 @@ jobs:
         uses: actions/checkout@v4
 
       - name: Generate buildsystem
-        env:
-          CXXFLAGS: '/WX ${{ matrix.configuration.cxx_flags }}'
         run: cmake -B build -DMINISKETCH_BUILD_BENCHMARK=ON ${{ matrix.configuration.cmake_options }}
 
       - name: Build

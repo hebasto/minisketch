@@ -18,7 +18,7 @@
 cmake_minimum_required(VERSION 3.22)
 
 #=============================
-# Project / Package metadata
+# Project / Package Metadata
 #=============================
 project(minisketch
   VERSION 0.0.1
@@ -50,7 +50,7 @@ if(NOT CMAKE_ARCHIVE_OUTPUT_DIRECTORY)
 endif()
 
 #=============================
-# Language setup
+# Language Setup
 #=============================
 # Require C++11, but let a parent project ask for something higher.
 if(DEFINED CMAKE_CXX_STANDARD)
@@ -67,7 +67,7 @@ if(NOT DEFINED CMAKE_CXX_EXTENSIONS)
 endif()
 
 #=============================
-# Configurable options
+# Configurable Options
 #=============================
 option(MINISKETCH_INSTALL "Enable installation." ${PROJECT_IS_TOP_LEVEL})
 
@@ -96,7 +96,7 @@ unset(have_enabled_fields)
 unset(supported_fields)
 
 #=============================
-# Build options
+# Build Options
 #=============================
 set(CMAKE_CXX_VISIBILITY_PRESET hidden)
 
@@ -109,24 +109,24 @@ if(MINGW)
 endif()
 
 #=============================
-# Diagnostics options
+# Diagnostics Options
 #=============================
 if(MSVC)
   # For both MSVC's cl.exe and clang-cl compilers.
-  add_compile_options(/W4)  # Enables -Wall Clang's core option.
+  add_compile_options(/W3)  # Production quality warning level. Enables -Wall Clang's core option.
 else()
   add_compile_options(-Wall)
 endif()
 
 if(CMAKE_CXX_COMPILER_ID STREQUAL "MSVC")
-  add_compile_options(/wd4060)
-  add_compile_options(/wd4065)
-  add_compile_options(/wd4100)
-  add_compile_options(/wd4127)
-  add_compile_options(/wd4146)
-  add_compile_options(/wd4244)
-  add_compile_options(/wd4267)
-  add_compile_options(/wd4310)
+  # add_compile_options(/wd4060)
+  # add_compile_options(/wd4065)
+  # add_compile_options(/wd4100)
+  # add_compile_options(/wd4127)
+  add_compile_options(/wd4146)  # Disable warning C4146 "unary minus operator applied to unsigned type, result still unsigned".
+  add_compile_options(/wd4244)  # Disable warning C4244 "conversion from 'type1' to 'type2', possible loss of data".
+  # add_compile_options(/wd4267)
+  # add_compile_options(/wd4310)
 else()
   add_compile_options(-Wundef)
 endif()

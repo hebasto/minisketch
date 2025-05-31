@@ -48,10 +48,10 @@ jobs:
         run: cmake --build build --config ${{ matrix.configuration.build_configuration }}
 
       - name: Binaries info
-        working-directory: build
         shell: bash
         run: |
-          file bin/${{ matrix.configuration.build_configuration }}/* || true
+          cd build/bin/${{ matrix.configuration.build_configuration }}
+          file * || true
 
       - name: Check
         working-directory: build

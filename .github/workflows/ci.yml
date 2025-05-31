@@ -36,7 +36,7 @@ jobs:
         uses: actions/checkout@v4
 
       - name: Generate buildsystem
-        run: cmake -B build -DMINISKETCH_BUILD_BENCHMARK=ON ${{ matrix.configuration.cmake_options }}
+        run: cmake -B build -DMINISKETCH_FIELDS=32 -DMINISKETCH_BUILD_BENCHMARK=ON ${{ matrix.configuration.cmake_options }}
 
       - name: Build
         run: cmake --build build --config ${{ matrix.configuration.build_configuration }}
@@ -52,4 +52,3 @@ jobs:
         shell: bash
         run: |
           ctest --output-on-failure -j $NUMBER_OF_PROCESSORS -C ${{ matrix.configuration.build_configuration }}
-          bin/${{ matrix.configuration.build_configuration }}/bench.exe

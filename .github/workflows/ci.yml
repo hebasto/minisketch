@@ -23,6 +23,10 @@ jobs:
         configuration:
           - job_name: 'x64 (MSVC): Windows (VS 2022)'
             build_configuration: 'Release'
+          - job_name: 'x64 (MSVC): Windows (VS 2022, Debug)'
+            build_configuration: 'Debug'
+          - job_name: 'x64 (MSVC): Windows (VS 2022, RelWithDebInfo)'
+            build_configuration: 'RelWithDebInfo'
           - job_name: 'x64 (MSVC): Windows (VS 2022, shared)'
             cmake_options: '-DBUILD_SHARED_LIBS=ON'
             build_configuration: 'Release'

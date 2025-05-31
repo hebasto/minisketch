@@ -119,8 +119,8 @@ else()
 endif()
 
 if(CMAKE_CXX_COMPILER_ID STREQUAL "MSVC")
-  # add_compile_options(/wd4060)
-  # add_compile_options(/wd4065)
+  add_compile_options(/wd4060)  # Disable warning C4060 "switch statement contains no 'case' or 'default' labels".
+  add_compile_options(/wd4065)  # Disable warning C4065 "switch statement contains 'default' but no 'case' labels".
   # add_compile_options(/wd4100)
   # add_compile_options(/wd4127)
   add_compile_options(/wd4146)  # Disable warning C4146 "unary minus operator applied to unsigned type, result still unsigned".

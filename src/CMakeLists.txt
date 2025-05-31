@@ -11,6 +11,13 @@ target_compile_definitions(minisketch_verify
     MINISKETCH_VERIFY
 )
 target_link_libraries(minisketch_verify PRIVATE minisketch_field_sources)
+if(CMAKE_CXX_COMPILER_ID STREQUAL "MSVC")
+  target_compile_options(minisketch_verify
+    PRIVATE
+      /wd2220
+      /wd4702
+  )
+endif()
 
 if(MINISKETCH_BUILD_TESTS)
   add_executable(test-noverify test.cpp)

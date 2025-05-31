@@ -32,6 +32,7 @@ jobs:
             cmake_options: '-A Win32'
             build_configuration: 'Release'
           - job_name: 'x64 (clang-cl): Windows (VS 2022)'
+            cxx_flags: '-Wno-error=unused-parameter'
             cmake_options: '-T ClangCL'
             build_configuration: 'Release'
 
@@ -41,7 +42,7 @@ jobs:
 
       - name: Generate buildsystem
         env:
-          CXXFLAGS: '/WX'
+          CXXFLAGS: '/WX ${{ matrix.configuration.cxx_flags }}'
         run: cmake -B build -DMINISKETCH_BUILD_BENCHMARK=ON ${{ matrix.configuration.cmake_options }}
 
       - name: Build

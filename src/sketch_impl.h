@@ -92,8 +92,7 @@ template<typename F>
 void Sqr(std::vector<typename F::Elem>& poly, const F& field) {
     if (poly.size() == 0) return;
     poly.resize(poly.size() * 2 - 1);
-    for (size_t i = 0; i < poly.size(); ++i) {
-        auto x = poly.size() - i - 1;
+    for (int x = poly.size() - 1; x >= 0; --x) {
         poly[x] = (x & 1) ? 0 : field.Sqr(poly[x / 2]);
     }
 }
@@ -298,7 +297,7 @@ std::vector<typename F::Elem> BerlekampMassey(const std::vector<typename F::Elem
         auto discrepancy = syndromes[n];
         for (size_t i = 1; i < current.size(); ++i) discrepancy ^= table[n - i](current[i]);
         if (discrepancy != 0) {
-            int x = static_cast<int>(n + 1 - (current.size() - 1) - (prev.size() - 1));
+            int x = n + 1 - (current.size() - 1) - (prev.size() - 1);
             if (!b_have_inv) {
                 b_inv = field.Inv(b);
                 b_have_inv = true;
@@ -406,7 +405,7 @@ public:
         for (const auto& root : roots) {
             *(out++) = m_field.ToUint64(root);
         }
-        return static_cast<int>(roots.size());
+        return roots.size();
     }
 
     size_t Merge(const Sketch* other_sketch) override

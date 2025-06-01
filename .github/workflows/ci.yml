@@ -55,7 +55,7 @@ jobs:
         shell: bash
         run: |
           cd build/bin/${{ matrix.configuration.build_configuration }}
-          file *.exe *.dll 2>/dev/null
+          file * | grep "\.exe\|\.dll"
 
       - name: Check
         working-directory: build

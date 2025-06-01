@@ -34,7 +34,6 @@ jobs:
             cmake_options: '-DBUILD_SHARED_LIBS=ON'
             build_configuration: 'Release'
           - job_name: 'x64 (clang-cl): Windows (VS 2022)'
-            cxx_flags: '-Wno-error=unused-parameter'
             cmake_options: '-T ClangCL'
             build_configuration: 'Release'
             # TODO: Resolve the issue and re-enable benchmark.
@@ -56,7 +55,7 @@ jobs:
         shell: bash
         run: |
           cd build/bin/${{ matrix.configuration.build_configuration }}
-          file * || true
+          file *.exe *.dll
 
       - name: Check
         working-directory: build

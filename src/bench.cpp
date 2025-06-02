@@ -6,6 +6,7 @@
 
 #include "../include/minisketch.h"
 #include <string.h>
+#include <limits>
 #include <memory>
 #include <vector>
 #include <chrono>
@@ -42,7 +43,13 @@ int main(int argc, char** argv) {
             std::vector<minisketch*> states;
             std::vector<uint64_t> roots(2 * syndromes);
             std::random_device rng;
-            std::uniform_int_distribution<uint64_t> dist(1, (uint64_t(1) << bits) - 1);
+            uint64_t upper_bound;
+            if (bits < 64) {
+                upper_bound = (uint64_t(1) << bits) - 1;
+            } else {
+                upper_bound = std::numeric_limits<uint64_t>::max();
+            }
+            std::uniform_int_distribution<uint64_t> dist(1, upper_bound);
             states.resize(iters);
             std::vector<double> benches;
             benches.reserve(iters);

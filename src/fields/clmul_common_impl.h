@@ -28,7 +28,15 @@ namespace {
 #  define NO_SANITIZE_MEMORY
 #endif
 
-template<typename I, int BITS, I MOD> NO_SANITIZE_MEMORY I MulWithClMulReduce(I a, I b)
+#if defined(__cplusplus) && __cplusplus >= 201703L
+#  define MINISKETCH_MAYBE_UNUSED [[maybe_unused]]
+#elif defined(__GNUC__)
+#  define MINISKETCH_MAYBE_UNUSED __attribute__((unused))
+#else
+#  define MINISKETCH_MAYBE_UNUSED
+#endif
+
+template<typename I, int BITS, I MOD> NO_SANITIZE_MEMORY MINISKETCH_MAYBE_UNUSED I MulWithClMulReduce(I a, I b)
 {
     static constexpr I MASK = Mask<BITS, I>();
 
@@ -65,7 +73,7 @@ template<typename I, int BITS, I MOD> NO_SANITIZE_MEMORY I MulWithClMulReduce(I 
     }
 }
 
-template<typename I, int BITS, int POS> NO_SANITIZE_MEMORY I MulTrinomial(I a, I b)
+template<typename I, int BITS, int POS> NO_SANITIZE_MEMORY MINISKETCH_MAYBE_UNUSED I MulTrinomial(I a, I b)
 {
     static constexpr I MASK = Mask<BITS, I>();
 

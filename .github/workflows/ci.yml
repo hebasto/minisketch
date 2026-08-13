@@ -179,6 +179,24 @@ jobs:
       - *CI_SCRIPT_IN_DOCKER
       - *PRINT_LOGS
 
+  mingw_debian:
+    name: "x86_64-w64-mingw32: Linux (Debian stable, Wine)"
+    runs-on: ubuntu-latest
+    needs: docker_cache
+    strategy:
+      matrix:
+        configuration:
+          - env_vars: {}
+    env:
+      EXEC_CMD: 'wine'
+      EXEC_EXT: '.exe'
+      HOST: 'x86_64-w64-mingw32'
+      BUILD:
+    steps:
+      - *CHECKOUT
+      - *CI_SCRIPT_IN_DOCKER
+      - *PRINT_LOGS
+
   windows-native:
     name: ${{ matrix.configuration.job_name }}
     # See: https://github.com/actions/runner-images#available-images.

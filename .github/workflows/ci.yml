@@ -127,9 +127,9 @@ jobs:
       - *PRINT_LOGS
 
   arm64-macos-native:
-    name: "ARM64: macOS Tahoe"
+    name: "ARM64: macOS Sonoma"
     # See: https://github.com/actions/runner-images#available-images.
-    runs-on: macos-26
+    runs-on: macos-14
     env:
       # GHA gives us a fixed number of 3 virtual CPUs.
       # See: https://docs.github.com/en/actions/reference/runners/github-hosted-runners.

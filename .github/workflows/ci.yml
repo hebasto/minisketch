@@ -11,7 +11,98 @@ concurrency:
   group: ${{ github.event_name != 'pull_request' && github.run_id || github.ref }}
   cancel-in-progress: true
 
+env:
+  BUILD: 'check'
+  HOST:
+  MAKEFLAGS: '-j4'
+  BENCH: 'yes'
+  TESTRUNS:
+  EXEC_CMD:
+  ENABLE_FIELDS:
+
 jobs:
+  docker_cache:
+    name: "Build ${{ matrix.arch }} Docker image"
+    runs-on: ${{ matrix.runner }}
+    outputs:
+      cache_scope: ${{ steps.cache_timestamp.outputs.period }}
+
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - arch: x64
+            runner: ubuntu-latest
+          - arch: arm64
+            runner: ubuntu-24.04-arm
+
+    steps:
+      - name: Get cache validity period
+        id: cache_timestamp
+        run: echo "period=$((10#$(date +%V) / 4))" >> "$GITHUB_OUTPUT"
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v4
+        with:
+          # See: https://github.com/moby/buildkit/issues/3969.
+          driver-opts: |
+            network=host
+
+      - name: Build container
+        uses: docker/build-push-action@v7
+        with:
+          file: ./ci/linux-debian.Dockerfile
+          cache-from: type=gha,scope=${{ runner.arch }}-${{ steps.cache_timestamp.outputs.period }}
+          cache-to: type=gha,scope=${{ runner.arch }}-${{ steps.cache_timestamp.outputs.period }},mode=min
+
+  x86_64-debian:
+    name: "x86_64: Linux (Debian stable)"
+    runs-on: ubuntu-latest
+    needs: docker_cache
+
+    strategy:
+      fail-fast: false
+      matrix:
+        configuration:
+          - env_vars:
+              ENABLE_FIELDS: '11,64,37'
+          - env_vars:
+              BUILD: 'distcheck'
+          - env_vars:
+              EXEC_CMD: 'valgrind --error-exitcode=42'
+              TESTRUNS: 1
+              BUILD:
+          - env_vars:
+              CXXFLAGS: '-fsanitize=undefined -fno-omit-frame-pointer'
+              LDFLAGS: '-fsanitize=undefined -fno-omit-frame-pointer'
+              UBSAN_OPTIONS: 'print_stacktrace=1:halt_on_error=1'
+              BENCH: 'no'
+        cxx:
+          - 'g++'
+          - 'clang++ -gdwarf-4'
+
+    env:
+      CXX: ${{ matrix.cxx }}
+
+    steps:
+      - &CHECKOUT
+        name: Checkout
+        uses: actions/checkout@v7
+
+      - &CI_SCRIPT_IN_DOCKER
+        name: CI script
+        env: ${{ matrix.configuration.env_vars }}
+        uses: ./.github/actions/run-in-docker-action
+        with:
+          dockerfile: ./ci/linux-debian.Dockerfile
+          scope: ${{ runner.arch }}-${{ needs.docker_cache.outputs.cache_scope }}
+          command: ./ci/ci.sh
+
+      - &PRINT_LOGS
+        name: Print logs
+        uses: ./.github/actions/print-logs
+        if: ${{ !cancelled() }}
+
   windows-native:
     name: ${{ matrix.configuration.job_name }}
     # See: https://github.com/actions/runner-images#available-images.

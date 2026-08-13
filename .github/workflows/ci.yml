@@ -162,6 +162,23 @@ jobs:
         run: ./ci/ci.sh
       - *PRINT_LOGS
 
+  s390x_debian:
+    name: "s390x (big-endian): Linux (Debian stable, QEMU)"
+    runs-on: ubuntu-latest
+    needs: docker_cache
+    strategy:
+      matrix:
+        configuration:
+          - env_vars: {}
+    env:
+      EXEC_CMD: 'qemu-s390x'
+      HOST: 's390x-linux-gnu'
+      BUILD:
+    steps:
+      - *CHECKOUT
+      - *CI_SCRIPT_IN_DOCKER
+      - *PRINT_LOGS
+
   windows-native:
     name: ${{ matrix.configuration.job_name }}
     # See: https://github.com/actions/runner-images#available-images.

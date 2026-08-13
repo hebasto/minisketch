@@ -19,6 +19,9 @@ env:
   TESTRUNS:
   EXEC_CMD:
   ENABLE_FIELDS:
+  # Disable Docker build summary generation.
+  # See https://github.com/docker/build-push-action/blob/master/README.md#environment-variables.
+  DOCKER_BUILD_SUMMARY: false
 
 jobs:
   docker_cache:
@@ -102,6 +105,38 @@ jobs:
         name: Print logs
         uses: ./.github/actions/print-logs
         if: ${{ !cancelled() }}
+
+  i686_debian:
+    name: "i686: Linux (Debian stable)"
+    runs-on: ubuntu-latest
+    needs: docker_cache
+
+    strategy:
+      fail-fast: false
+      matrix:
+        configuration:
+          - env_vars:
+              ENABLE_FIELDS: '7,32,58'
+          - env_vars:
+              BUILD: 'distcheck'
+          - env_vars:
+              EXEC_CMD: 'valgrind --error-exitcode=42'
+              TESTRUNS: 1
+              BUILD:
+        compiler:
+          - cxx: 'i686-linux-gnu-g++'
+          - cxx: 'clang++ --target=i686-linux-gnu -gdwarf-4'
+            cxxflags: '-g -O2 -isystem /usr/i686-linux-gnu/include -isystem /usr/i686-linux-gnu/include/c++/10/i686-linux-gnu'
+
+    env:
+      HOST: 'i686-linux-gnu'
+      CXX: ${{ matrix.cxx }}
+      CXXFLAGS: ${{ matrix.cxxflags }}
+
+    steps:
+      - *CHECKOUT
+      - *CI_SCRIPT_IN_DOCKER
+      - *PRINT_LOGS
 
   windows-native:
     name: ${{ matrix.configuration.job_name }}
